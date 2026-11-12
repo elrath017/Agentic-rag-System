@@ -1,0 +1,24 @@
+# Python
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Environment
+.env
+.env.local
+
+# Databases & Indexes
+chroma_db/
+data/uploads/
+*.sqlite3
+
+# Evaluation outputs & logs
+*.log
+benchmark_results.csv
+
+# IDE
+.vscode/
+.idea/

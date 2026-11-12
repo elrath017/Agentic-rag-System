@@ -1,0 +1,26 @@
+# NovaCorp Enterprise Annual Strategic AI & Financial Report (FY 2024-2025)
+
+## Executive Summary
+NovaCorp delivered a milestone financial year in 2024-2025, reaching a total consolidated revenue of $4.85 billion, representing an 18.4% year-over-year increase. The enterprise software and cloud AI division accounted for 42% of total net profits, driven primarily by enterprise adoption of our flagship Agentic Intelligence Orchestrator.
+
+## Financial Performance Highlights
+- Consolidated Gross Revenue: $4.85 Billion (+18.4% YoY)
+- Operating Income: $1.12 Billion (Operating margin of 23.1%)
+- R&D Expenditure: $640 Million (13.2% of gross revenue dedicated to neural architectures and synthetic data pipelines)
+- Enterprise Customer Retention Rate (NDR): 124%
+- Cloud Infrastructure Gross Margins: 68.5%
+
+## Key Strategic Pillars & Technology Roadmap
+1. Transition to Small Language Models (SLMs):
+   In Q3 2024, NovaCorp completed the migration of internal reasoning workloads from 70B parameter models to quantized 3B and 8B specialized models. This transition achieved a 58% reduction in inference serving latency and saved $14.2M annually in cloud GPU compute costs while preserving 98.4% domain task accuracy.
+
+2. Hybrid Information Retrieval Infrastructure:
+   All unstructured knowledge systems now utilize hybrid sparse-dense indexing combining BM25Okapi and hierarchical navigable small world (HNSW) vector graphs with cross-encoder re-ranking. Internal search benchmark evaluation using Ragas showed a jump in context precision from 64.2% to 91.8%.
+
+3. Security, Governance, and Hallucination Controls:
+   Automated fact-checking nodes verify the faithfulness of every generated response against retrieved passage ground truths. Responses failing the strict alignment threshold are dynamically re-routed to query re-writing or verified web search fallbacks.
+
+## Risk Factors & Headwinds
+- Semiconductor Supply Chain Constraints: High-end accelerator GPU lead times remain extended at 16 weeks.
+- Regulatory Compliance: The rollout of global AI safety legislation has necessitated an additional $45M compliance budget for continuous model auditing and explainability frameworks.
+- Cyber Threat Landscape: Adversarial prompt injection attacks targeting external customer endpoints increased by 31% YoY.
