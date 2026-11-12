@@ -6,6 +6,7 @@ from pydantic import BaseModel
 from src import config
 from src.ingestion.parser import DocumentParser
 from src.ingestion.splitter import DocumentChunker
+from src.ingestion.url_parser import URLArticleParser
 from src.retrieval.dense import DenseRetriever
 from src.retrieval.sparse import SparseBM25Retriever
 from src.retrieval.hybrid import HybridRetriever
@@ -29,6 +30,9 @@ agent_app = None
 
 class QueryRequest(BaseModel):
     query: str
+
+class URLIngestRequest(BaseModel):
+    urls: List[str]
 
 class QueryResponse(BaseModel):
     query: str
@@ -109,4 +113,28 @@ def ingest_file(file: UploadFile = File(...)):
         "message": f"Successfully ingested {file.filename}",
         "raw_pages": len(raw_docs),
         "indexed_chunks": len(chunks)
+    }
+
+@app.post("/api/ingest-url")
+def ingest_urls(req: URLIngestRequest):
+    if not dense_retriever or not sparse_retriever:
+        raise HTTPException(status_code=500, detail="Retrievers not initialized.")
+
+    if not req.urls:
+        raise HTTPException(status_code=400, detail="No URLs provided.")
+
+    parsed_docs = URLArticleParser.parse_urls(req.urls)
+    if not parsed_docs:
+        raise HTTPException(status_code=400, detail="Could not extract content from the provided URLs.")
+
+    chunker = DocumentChunker()
+    chunks = chunker.split_documents(parsed_docs)
+
+    dense_retriever.add_documents(chunks)
+    sparse_retriever.index_documents(chunks)
+
+    return {
+        "message": f"Successfully indexed {len(parsed_docs)} article(s)",
+        "indexed_chunks": len(chunks),
+        "articles": [doc.metadata.get("title", doc.metadata.get("source")) for doc in parsed_docs]
     }
