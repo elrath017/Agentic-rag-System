@@ -1,24 +1,30 @@
-# Python
+# Virtual environment
 venv/
+
+# Environment secrets
+.env
+.env.*
+!.env.example
+
+# Local vector database
+chroma_db/
+chroma_db_test/
+
+# Uploaded documents
+data/uploads/
+
+# Local test / scratch scripts
+test_pipeline.py
+
+# Python cache & bytecode
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
-.Python
 
-# Environment
-.env
-.env.local
-
-# Databases & Indexes
-chroma_db/
-data/uploads/
-*.sqlite3
-
-# Evaluation outputs & logs
+# Logs
 *.log
-benchmark_results.csv
 
-# IDE
+# IDE & OS metadata
 .vscode/
 .idea/
+.DS_Store
+Thumbs.db

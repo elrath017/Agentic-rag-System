@@ -16,6 +16,8 @@ datasets>=2.19.0
 
 # Search & Tools
 duckduckgo-search>=6.1.0
+requests>=2.31.0
+beautifulsoup4>=4.12.0
 
 # API & Web App
 fastapi>=0.111.0
