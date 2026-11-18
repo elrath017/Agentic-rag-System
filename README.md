@@ -108,7 +108,7 @@ Copy `.env.example` to `.env` and fill in your keys:
 GEMINI_API_KEY="your_gemini_api_key_here"
 
 # Model Selection
-LLM_MODEL="gemini-1.5-flash"
+LLM_MODEL="gemini-2.5-flash"
 EMBEDDING_MODEL="models/text-embedding-004"
 
 # Optional: Tavily API for advanced web search (fallback works with DuckDuckGo if blank)
