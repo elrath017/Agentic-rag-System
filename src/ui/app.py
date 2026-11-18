@@ -19,6 +19,7 @@ from src.retrieval.reranker import LLMReranker
 from src.agent.state import AgentState
 from src.agent.nodes import RAGNodes
 from src.agent.graph import create_agentic_rag_graph
+from src.utils import format_citations
 
 st.set_page_config(
     page_title="Autonomous Agentic RAG Engine",
@@ -26,17 +27,69 @@ st.set_page_config(
     layout="wide",
 )
 
+# Custom styling for interactive citations
+st.markdown("""
+<style>
+.citation-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none !important;
+    margin: 0 3px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    background-color: rgba(59, 130, 246, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    color: #3b82f6 !important;
+    font-size: 0.85em;
+    line-height: 1.2;
+    vertical-align: baseline;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+}
+.citation-link:hover {
+    background-color: rgba(59, 130, 246, 0.32);
+    border-color: rgba(59, 130, 246, 0.7);
+    transform: scale(1.1);
+}
+.citation-doc {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 3px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    background-color: rgba(156, 163, 175, 0.15);
+    border: 1px solid rgba(156, 163, 175, 0.3);
+    font-size: 0.85em;
+    line-height: 1.2;
+    vertical-align: baseline;
+    cursor: help;
+    transition: all 0.15s ease-in-out;
+}
+.citation-doc:hover {
+    background-color: rgba(156, 163, 175, 0.3);
+    border-color: rgba(156, 163, 175, 0.6);
+}
+</style>
+""", unsafe_allow_html=True)
+
 st.title("🧠 Autonomous Agentic RAG System")
 st.caption("Hybrid Search (BM25 + Dense Chroma) • Cross-Encoder Reranking • News & Web Links Ingestion • Self-Correcting LangGraph")
 
 # Sidebar Configuration (API key is loaded securely from .env, hidden from UI)
 with st.sidebar:
-    st.header("⚙️ System Status")
-    if config.GEMINI_API_KEY:
-        st.success("🟢 Gemini API Connected")
-        st.caption(f"LLM: `{config.LLM_MODEL}` | Embeddings: `{config.EMBEDDING_MODEL}`")
-    else:
-        st.error("🔴 GEMINI_API_KEY Missing in .env")
+    status_icon = "🟢" if config.GEMINI_API_KEY else "🔴"
+    with st.expander(f"⚙️ System Status {status_icon}", expanded=False):
+        if config.GEMINI_API_KEY:
+            st.success("🟢 Gemini API Connected")
+            st.caption(f"**LLM:** `{config.LLM_MODEL}`\n\n**Embeddings:** `{config.EMBEDDING_MODEL}`")
+            if config.TAVILY_API_KEY:
+                st.caption("Search: `Tavily AI + DuckDuckGo`")
+            else:
+                st.caption("Search: `DuckDuckGo Fallback`")
+        else:
+            st.error("🔴 GEMINI_API_KEY Missing in .env")
 
     st.divider()
     st.subheader("📥 Knowledge Base Ingestion")
@@ -165,11 +218,15 @@ with tabs[0]:
 
                 with col1:
                     st.subheader("💡 Grounded Answer")
-                    st.markdown(result["generation"])
+                    formatted_answer = format_citations(result["generation"])
+                    st.markdown(formatted_answer, unsafe_allow_html=True)
 
                     st.markdown("### 📚 Cited Sources")
                     for src in result["sources"]:
-                        st.markdown(f"- `{src}`")
+                        if src.startswith("http://") or src.startswith("https://"):
+                            st.markdown(f"- 🔗 [{src}]({src})")
+                        else:
+                            st.markdown(f"- 📄 `{src}`")
 
                 with col2:
                     st.subheader("🔍 Agent Reasoning & Flow")
